@@ -2,20 +2,16 @@ export interface Hackathon {
   title: string;
   startDate: string;
   endDate: string;
-  registrationStartDate?: string;
-  registrationEndDate?: string;
   location: string;
-  platform: "devfolio" | "devpost" | "unstop" | "dorahacks";
+  platform: string;
   registrationUrl: string;
-  tags?: string[];
-  description?: string;
-  prizePool?: string;
 }
 
 export interface ApiResponse {
   hackathons: Hackathon[];
   success: boolean;
 }
+
 
 export type Platform = "devfolio" | "devpost" | "unstop" | "dorahacks";
 

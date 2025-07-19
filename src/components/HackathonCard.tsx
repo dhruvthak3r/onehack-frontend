@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Calendar, MapPin, ExternalLink, Bookmark, BookmarkCheck, Clock } from "lucide-react";
+import { Calendar, MapPin, ExternalLink, /* Bookmark, BookmarkCheck, */ Clock } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -8,16 +8,19 @@ import { format, isAfter, isBefore, differenceInDays } from "date-fns";
 
 interface HackathonCardProps {
   hackathon: Hackathon;
-  isBookmarked?: boolean;
-  onBookmarkToggle?: (hackathon: Hackathon) => void;
+  // isBookmarked?: boolean;
+  // onBookmarkToggle?: (hackathon: Hackathon) => void;
 }
 
-export function HackathonCard({ hackathon, isBookmarked = false, onBookmarkToggle }: HackathonCardProps) {
-  const [bookmarked, setBookmarked] = useState(isBookmarked);
-  const [isLoading, setIsLoading] = useState(false);
+export function HackathonCard({ hackathon /*, isBookmarked = false, onBookmarkToggle */ }: HackathonCardProps) {
+  // const [bookmarked, setBookmarked] = useState(isBookmarked);
+  // const [isLoading, setIsLoading] = useState(false);
 
-  const startDate = new Date(hackathon.startDate);
-  const endDate = new Date(hackathon.endDate);
+  const startDate = new Date("2025-07-25T00:00:00Z");
+  const endDate = new Date("2025-07-27T00:00:00Z");
+  console.log("Start Date:", hackathon.startDate);
+  console.log("End Date:", hackathon.endDate);
+
   const now = new Date();
   
   const isUpcoming = isAfter(startDate, now);
@@ -26,19 +29,19 @@ export function HackathonCard({ hackathon, isBookmarked = false, onBookmarkToggl
   
   const daysUntilStart = isUpcoming ? differenceInDays(startDate, now) : 0;
 
-  const handleBookmarkToggle = async () => {
-    if (!onBookmarkToggle) return;
+  // const handleBookmarkToggle = async () => {
+  //   if (!onBookmarkToggle) return;
     
-    setIsLoading(true);
-    try {
-      await onBookmarkToggle(hackathon);
-      setBookmarked(!bookmarked);
-    } catch (error) {
-      console.error("Error toggling bookmark:", error);
-    } finally {
-      setIsLoading(false);
-    }
-  };
+  //   setIsLoading(true);
+  //   try {
+  //     await onBookmarkToggle(hackathon);
+  //     setBookmarked(!bookmarked);
+  //   } catch (error) {
+  //     console.error("Error toggling bookmark:", error);
+  //   } finally {
+  //     setIsLoading(false);
+  //   }
+  // };
 
   const handleAddToCalendar = () => {
     const title = encodeURIComponent(hackathon.title);
@@ -83,7 +86,9 @@ export function HackathonCard({ hackathon, isBookmarked = false, onBookmarkToggl
               {getStatusBadge()}
             </div>
           </div>
-          <Button
+
+          {/* Bookmark button removed */}
+          {/* <Button
             variant="ghost"
             size="sm"
             onClick={handleBookmarkToggle}
@@ -95,7 +100,7 @@ export function HackathonCard({ hackathon, isBookmarked = false, onBookmarkToggl
             ) : (
               <Bookmark className="h-4 w-4" />
             )}
-          </Button>
+          </Button> */}
         </div>
       </CardHeader>
 

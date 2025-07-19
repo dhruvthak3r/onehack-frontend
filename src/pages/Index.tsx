@@ -4,13 +4,13 @@ import { SearchFilters } from "@/components/SearchFilters";
 import { HackathonCard } from "@/components/HackathonCard";
 import { EmptyState } from "@/components/EmptyState";
 import { useHackathons } from "@/hooks/useHackathons";
-import { useBookmarks } from "@/hooks/useBookmarks";
+// import { useBookmarks } from "@/hooks/useBookmarks"; // ❌ Commented for testing
 import { FilterState } from "@/types/hackathon";
 import { Loader2, Sparkles } from "lucide-react";
 
 const Index = () => {
   const { hackathons, loading, error, searchHackathons, filterHackathons } = useHackathons();
-  const { isBookmarked, toggleBookmark } = useBookmarks();
+  // const { isBookmarked, toggleBookmark } = useBookmarks(); // ❌ Commented for testing
   
   const [filters, setFilters] = useState<FilterState>({
     platforms: [],
@@ -100,8 +100,8 @@ const Index = () => {
               >
                 <HackathonCard
                   hackathon={hackathon}
-                  isBookmarked={isBookmarked(hackathon)}
-                  onBookmarkToggle={toggleBookmark}
+                  // isBookmarked={isBookmarked(hackathon)} // ❌ Commented for testing
+                  // onBookmarkToggle={toggleBookmark}      // ❌ Commented for testing
                 />
               </div>
             ))}
