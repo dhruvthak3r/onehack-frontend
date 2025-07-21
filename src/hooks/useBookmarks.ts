@@ -32,7 +32,7 @@ export function useBookmarks() {
   const isBookmarked = (hackathon: Hackathon) => {
     return bookmarks.some(b => 
       b.title === hackathon.title && 
-      b.startDate === hackathon.startDate
+      b.start_date === hackathon.start_date
     );
   };
 
@@ -67,7 +67,7 @@ export function useBookmarks() {
       await new Promise(resolve => setTimeout(resolve, 300));
       
       const newBookmarks = bookmarks.filter(b => 
-        !(b.title === hackathon.title && b.startDate === hackathon.startDate)
+        !(b.title === hackathon.title && b.start_date === hackathon.start_date)
       );
       saveBookmarks(newBookmarks);
     } catch (error) {

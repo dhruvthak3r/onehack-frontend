@@ -18,7 +18,7 @@ export function Header() {
               <Code className="h-4 w-4 text-white" />
             </div>
             <div>
-              <h1 className="font-bold text-lg text-gradient">HackHub</h1>
+              <h1 className="font-bold text-lg text-gradient">OneHack</h1>
               <p className="text-xs text-muted-foreground -mt-1">Discover hackathons</p>
             </div>
           </Link>

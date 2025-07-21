@@ -16,15 +16,13 @@ export function HackathonCard({ hackathon /*, isBookmarked = false, onBookmarkTo
   // const [bookmarked, setBookmarked] = useState(isBookmarked);
   // const [isLoading, setIsLoading] = useState(false);
 
-  const startDate = new Date("2025-07-25T00:00:00Z");
-  const endDate = new Date("2025-07-27T00:00:00Z");
-  console.log("Start Date:", hackathon.startDate);
-  console.log("End Date:", hackathon.endDate);
+  const startDate = new Date(`${hackathon.start_date}T00:00:00Z`);
+  const endDate = new Date(`${hackathon.end_date}T00:00:00Z`);
 
   const now = new Date();
   
-  const isUpcoming = isAfter(startDate, now);
-  const isLive = !isBefore(endDate, now) && !isAfter(startDate, now);
+  const isUpcoming = isAfter(hackathon.start_date, now);
+  const isLive = !isBefore(hackathon.end_date, now) && !isAfter(hackathon.start_date, now);
   const isPast = isBefore(endDate, now);
   
   const daysUntilStart = isUpcoming ? differenceInDays(startDate, now) : 0;
@@ -45,8 +43,8 @@ export function HackathonCard({ hackathon /*, isBookmarked = false, onBookmarkTo
 
   const handleAddToCalendar = () => {
     const title = encodeURIComponent(hackathon.title);
-    const details = encodeURIComponent(`Registration: ${hackathon.registrationUrl}`);
-    const location = encodeURIComponent(hackathon.location);
+    const details = encodeURIComponent(`Registration: ${hackathon.url}`);
+    const location = encodeURIComponent(hackathon.mode);
     const startDateISO = format(startDate, "yyyyMMdd'T'HHmmss'Z'");
     const endDateISO = format(endDate, "yyyyMMdd'T'HHmmss'Z'");
     
@@ -115,7 +113,7 @@ export function HackathonCard({ hackathon /*, isBookmarked = false, onBookmarkTo
           
           <div className="flex items-center gap-2">
             <MapPin className="h-4 w-4 text-accent" />
-            <span>{hackathon.location}</span>
+            <span>{hackathon.mode}</span>
           </div>
 
           {isUpcoming && daysUntilStart > 0 && (
@@ -141,7 +139,7 @@ export function HackathonCard({ hackathon /*, isBookmarked = false, onBookmarkTo
           
           <Button 
             size="sm" 
-            onClick={() => window.open(hackathon.registrationUrl, '_blank')}
+            onClick={() => window.open(hackathon.url, '_blank')}
             className="flex-1 bg-gradient-primary hover:opacity-90 transition-opacity"
           >
             <ExternalLink className="h-4 w-4 mr-2" />

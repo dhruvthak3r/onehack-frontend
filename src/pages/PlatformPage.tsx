@@ -40,7 +40,7 @@ const platformData = {
 const PlatformPage = () => {
   const { platform } = useParams<{ platform: string }>();
   const { hackathons, loading, error, fetchByPlatform } = useHackathons();
-  const { isBookmarked, toggleBookmark } = useBookmarks();
+  //const { isBookmarked, toggleBookmark } = useBookmarks();
 
   const currentPlatform = platform as Platform;
   const platformInfo = platformData[currentPlatform];
@@ -52,7 +52,10 @@ const PlatformPage = () => {
   }, [currentPlatform, fetchByPlatform]);
 
   // Filter hackathons by current platform
-  const filteredHackathons = hackathons.filter(h => h.platform === currentPlatform);
+  
+  const filteredHackathons = hackathons.filter(
+  h => h.platform.toLowerCase() === currentPlatform.toLowerCase()
+  );
 
   if (!platformInfo) {
     return (
@@ -148,14 +151,14 @@ const PlatformPage = () => {
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-7xl mx-auto">
               {filteredHackathons.map((hackathon, index) => (
                 <div
-                  key={`${hackathon.title}-${hackathon.startDate}`}
+                  key={`${hackathon.title}-${hackathon.start_date}`}
                   className="animate-fade-in"
                   style={{ animationDelay: `${index * 0.1}s` }}
                 >
                   <HackathonCard
                     hackathon={hackathon}
-                    isBookmarked={isBookmarked(hackathon)}
-                    onBookmarkToggle={toggleBookmark}
+                    //isBookmarked={isBookmarked(hackathon)}
+                    //onBookmarkToggle={toggleBookmark}
                   />
                 </div>
               ))}

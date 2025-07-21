@@ -1,10 +1,11 @@
 export interface Hackathon {
+  id : String;
   title: string;
-  startDate: string;
-  endDate: string;
-  location: string;
+  start_date: string;
+  end_date: string;
+  mode: string;
   platform: string;
-  registrationUrl: string;
+  url: string;
 }
 
 export interface ApiResponse {
@@ -24,3 +25,5 @@ export interface FilterState {
   location: "all" | "remote" | "offline";
   search: string;
 }
+
+

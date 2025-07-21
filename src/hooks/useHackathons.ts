@@ -31,7 +31,7 @@ export function useHackathons() {
   };
 
   const searchHackathons = async (query: string): Promise<Hackathon[]> => {
-    const response = await fetch(`${API_BASE}/api/search?query=${encodeURIComponent(query)}`);
+    const response = await fetch(`${API_BASE}/api/search?q=${encodeURIComponent(query)}`);
     if (!response.ok) throw new Error("Search request failed");
 
     const data: ApiResponse = await response.json();

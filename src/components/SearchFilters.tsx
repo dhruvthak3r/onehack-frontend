@@ -29,7 +29,7 @@ export function SearchFilters({ filters, onFiltersChange, onSearch, className }:
   const handleSearchSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     onSearch(searchQuery);
-    onFiltersChange({ ...filters, search: searchQuery });
+    //onFiltersChange({ ...filters, search: searchQuery });
   };
 
   const handlePlatformToggle = (platform: Platform) => {

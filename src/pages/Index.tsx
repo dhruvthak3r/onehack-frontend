@@ -5,7 +5,7 @@ import { HackathonCard } from "@/components/HackathonCard";
 import { EmptyState } from "@/components/EmptyState";
 import { useHackathons } from "@/hooks/useHackathons";
 // import { useBookmarks } from "@/hooks/useBookmarks"; // ❌ Commented for testing
-import { FilterState } from "@/types/hackathon";
+import { FilterState, Hackathon } from "@/types/hackathon";
 import { Loader2, Sparkles } from "lucide-react";
 
 const Index = () => {
@@ -19,18 +19,27 @@ const Index = () => {
     search: ""
   });
 
-  const handleFiltersChange = (newFilters: FilterState) => {
-    setFilters(newFilters);
-    filterHackathons(newFilters);
+  const [searchResults, setSearchResults] = useState<Hackathon[] | null>(null);
+  const visibleHackathons = searchResults ?? hackathons;
+
+
+  const handleFiltersChange = async (newFilters: FilterState) => {
+  setFilters(newFilters);
+  setSearchResults(null); 
+  await filterHackathons(newFilters); 
   };
 
-  const handleSearch = (query: string) => {
-    if (query.trim()) {
-      searchHackathons(query);
-    } else {
-      filterHackathons(filters);
-    }
-  };
+
+  const handleSearch = async (query: string) => {
+  if (query.trim()) {
+    const result = await searchHackathons(query);
+    setSearchResults(result);
+    setFilters(prev => ({ ...prev, search: query }));
+  } else {
+    setSearchResults(null);
+  }
+};
+
 
   if (error) {
     return (
@@ -90,11 +99,11 @@ const Index = () => {
         )}
 
         {/* Hackathons Grid */}
-        {!loading && hackathons.length > 0 && (
+        {!loading && visibleHackathons.length > 0 && (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-7xl mx-auto">
-            {hackathons.map((hackathon, index) => (
+            {visibleHackathons.map((hackathon, index) => (
               <div
-                key={`${hackathon.title}-${hackathon.startDate}`}
+                key={`${hackathon.title}-${hackathon.start_date}`}
                 className="animate-fade-in"
                 style={{ animationDelay: `${index * 0.1}s` }}
               >
@@ -109,7 +118,7 @@ const Index = () => {
         )}
 
         {/* Empty State */}
-        {!loading && hackathons.length === 0 && (
+        {!loading && visibleHackathons.length === 0 && (
           <div className="max-w-2xl mx-auto">
             <EmptyState
               type="search"
@@ -133,7 +142,7 @@ const Index = () => {
         )}
 
         {/* Stats Footer */}
-        {!loading && hackathons.length > 0 && (
+        {!loading && visibleHackathons.length > 0 && (
           <div className="text-center mt-12 p-6 rounded-xl bg-gradient-glow border border-border/50">
             <p className="text-muted-foreground">
               Showing <span className="text-accent font-semibold">{hackathons.length}</span> hackathons
