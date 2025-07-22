@@ -40,7 +40,7 @@ export function SearchFilters({ filters, onFiltersChange, onSearch, className }:
     onFiltersChange({ ...filters, platforms: newPlatforms });
   };
 
-  const handleLocationChange = (location: "all" | "remote" | "offline") => {
+  const handleLocationChange = (location: "all" | "online" | "offline") => {
     onFiltersChange({ ...filters, location });
   };
 
@@ -167,7 +167,7 @@ export function SearchFilters({ filters, onFiltersChange, onSearch, className }:
                 </SelectTrigger>
                 <SelectContent>
                   <SelectItem value="all">All Locations</SelectItem>
-                  <SelectItem value="remote">Remote Only</SelectItem>
+                  <SelectItem value="online">Online Only</SelectItem>
                   <SelectItem value="offline">Offline Only</SelectItem>
                 </SelectContent>
               </Select>

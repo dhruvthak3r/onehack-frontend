@@ -41,18 +41,30 @@ export function useHackathons() {
   };
 
   const filterHackathons = async (filters: FilterState): Promise<Hackathon[]> => {
-    const response = await fetch(`${API_BASE}/api/filter`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(filters),
-    });
 
-    if (!response.ok) throw new Error("Filter request failed");
-    const data: ApiResponse = await response.json();
-    if (!data.success) throw new Error("Filtering failed");
-    return data.hackathons;
+    const queryparams = new URLSearchParams();
+    if(filters.location && filters.location !== "all") {
+      queryparams.append("mode", filters.location);
+    }
+     
+        if(filters.platforms.length > 0) {
+          filters.platforms.forEach(platform => {
+          queryparams.append("p", platform);
+          });
+        }
+
+
+  const queryString = queryparams.toString();
+  const response = await fetch(`${API_BASE}/api/get-all-hackathons${queryString ? "?" + queryString : ""}`, {
+    method: "GET",
+  });
+
+  if (!response.ok) throw new Error("Failed to fetch filtered hackathons");
+
+  const data: ApiResponse = await response.json();
+  if (!data.success) throw new Error("Filtering failed");
+
+  return data.hackathons;
   };
 
   return {

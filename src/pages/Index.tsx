@@ -26,7 +26,13 @@ const Index = () => {
   const handleFiltersChange = async (newFilters: FilterState) => {
   setFilters(newFilters);
   setSearchResults(null); 
-  await filterHackathons(newFilters); 
+
+  try {
+    const filteredResults = await filterHackathons(newFilters);
+    setSearchResults(filteredResults);
+  } catch (error) {
+    console.error("Filter failed:", error);
+  }
   };
 
 
