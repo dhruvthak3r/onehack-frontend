@@ -12,6 +12,8 @@ interface HackathonCardProps {
   // onBookmarkToggle?: (hackathon: Hackathon) => void;
 }
 
+
+
 export function HackathonCard({ hackathon /*, isBookmarked = false, onBookmarkToggle */ }: HackathonCardProps) {
   // const [bookmarked, setBookmarked] = useState(isBookmarked);
   // const [isLoading, setIsLoading] = useState(false);
@@ -48,7 +50,7 @@ export function HackathonCard({ hackathon /*, isBookmarked = false, onBookmarkTo
     const startDateISO = format(startDate, "yyyyMMdd'T'HHmmss'Z'");
     const endDateISO = format(endDate, "yyyyMMdd'T'HHmmss'Z'");
     
-    const calendarUrl = `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${title}&dates=${startDateISO}/${endDateISO}&details=${details}&location=${location}`;
+    const calendarUrl = `http://43.205.44.57:8080/api/add-to-calendar/${hackathon.id}`
     window.open(calendarUrl, '_blank');
   };
 
