@@ -1,5 +1,10 @@
 import { useState, useEffect } from "react";
-import { Hackathon } from "@/types/hackathon";
+import { Hackathon, ApiResponse} from "@/types/hackathon";
+
+const API_BASE = "https://99b635cdad97.ngrok-free.app";
+const DEFAULT_HEADERS = {
+  "ngrok-skip-browser-warning": "69420",
+};
 
 export function useBookmarks() {
   const [bookmarks, setBookmarks] = useState<Hackathon[]>([]);
@@ -7,7 +12,6 @@ export function useBookmarks() {
 
   const STORAGE_KEY = "hackhub-bookmarks";
 
-  // Load bookmarks from localStorage
   useEffect(() => {
     try {
       const saved = localStorage.getItem(STORAGE_KEY);
@@ -19,7 +23,6 @@ export function useBookmarks() {
     }
   }, []);
 
-  // Save bookmarks to localStorage
   const saveBookmarks = (newBookmarks: Hackathon[]) => {
     try {
       localStorage.setItem(STORAGE_KEY, JSON.stringify(newBookmarks));
@@ -30,21 +33,41 @@ export function useBookmarks() {
   };
 
   const isBookmarked = (hackathon: Hackathon) => {
-    return bookmarks.some(b => 
-      b.title === hackathon.title && 
-      b.start_date === hackathon.start_date
+    return bookmarks.some(
+      (b) => b.title === hackathon.title && b.start_date === hackathon.start_date
     );
   };
+
+  
 
   const addBookmark = async (hackathon: Hackathon) => {
     setLoading(true);
     try {
-      // In a real app, this would make an API call
-      // await fetch('/api/bookmark', { method: 'POST', body: JSON.stringify(hackathon) });
-      
-      // Simulate API delay
-      await new Promise(resolve => setTimeout(resolve, 300));
-      
+      const response = await fetch(`${API_BASE}/api/bookmark/${hackathon.id}`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          ...DEFAULT_HEADERS,
+        },
+        body: JSON.stringify(hackathon),
+        credentials: "include",
+      });
+
+      if (response.redirected) {
+      // Do the actual browser redirect manually
+      window.location.href = response.url;
+      return;
+       }
+
+      if (!response.ok) {
+        throw new Error("Failed to add bookmark");
+      }
+
+      const data: ApiResponse = await response.json();
+      if (!data.success) {
+        throw new Error("API returned unsuccessful response");
+      }
+
       if (!isBookmarked(hackathon)) {
         const newBookmarks = [...bookmarks, hackathon];
         saveBookmarks(newBookmarks);
@@ -60,14 +83,26 @@ export function useBookmarks() {
   const removeBookmark = async (hackathon: Hackathon) => {
     setLoading(true);
     try {
-      // In a real app, this would make an API call
-      // await fetch('/api/bookmark', { method: 'DELETE', body: JSON.stringify(hackathon) });
-      
-      // Simulate API delay
-      await new Promise(resolve => setTimeout(resolve, 300));
-      
-      const newBookmarks = bookmarks.filter(b => 
-        !(b.title === hackathon.title && b.start_date === hackathon.start_date)
+      const response = await fetch(`${API_BASE}/api/bookmark`, {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+          ...DEFAULT_HEADERS,
+        },
+        body: JSON.stringify(hackathon),
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to remove bookmark");
+      }
+
+      const data: ApiResponse = await response.json();
+      if (!data.success) {
+        throw new Error("API returned unsuccessful response");
+      }
+
+      const newBookmarks = bookmarks.filter(
+        (b) => !(b.title === hackathon.title && b.start_date === hackathon.start_date)
       );
       saveBookmarks(newBookmarks);
     } catch (error) {
@@ -92,6 +127,6 @@ export function useBookmarks() {
     isBookmarked,
     addBookmark,
     removeBookmark,
-    toggleBookmark
+    toggleBookmark,
   };
 }

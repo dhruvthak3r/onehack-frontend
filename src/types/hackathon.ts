@@ -22,7 +22,7 @@ export interface FilterState {
     start?: Date;
     end?: Date;
   };
-  location: "all" | "remote" | "offline";
+  location: "all" | "online" | "offline";
   search: string;
 }
 
