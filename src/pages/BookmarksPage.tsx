@@ -8,8 +8,8 @@ import { Badge } from "@/components/ui/badge";
 const BookmarksPage = () => {
   const { bookmarks, toggleBookmark } = useBookmarks();
 
-  const upcomingBookmarks = bookmarks.filter(h => new Date(h.startDate) > new Date());
-  const pastBookmarks = bookmarks.filter(h => new Date(h.endDate) < new Date());
+  const upcomingBookmarks = bookmarks.filter(h => new Date(h.start_date) > new Date());
+  const pastBookmarks = bookmarks.filter(h => new Date(h.end_date) < new Date());
 
   return (
     <div className="min-h-screen bg-background">
@@ -75,7 +75,7 @@ const BookmarksPage = () => {
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                   {upcomingBookmarks.map((hackathon, index) => (
                     <div
-                      key={`${hackathon.title}-${hackathon.startDate}`}
+                      key={`${hackathon.title}-${hackathon.start_date}`}
                       className="animate-fade-in"
                       style={{ animationDelay: `${index * 0.1}s` }}
                     >
@@ -103,7 +103,7 @@ const BookmarksPage = () => {
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                   {pastBookmarks.map((hackathon, index) => (
                     <div
-                      key={`${hackathon.title}-${hackathon.startDate}`}
+                      key={`${hackathon.title}-${hackathon.start_date}`}
                       className="animate-fade-in opacity-60"
                       style={{ animationDelay: `${(index + upcomingBookmarks.length) * 0.1}s` }}
                     >

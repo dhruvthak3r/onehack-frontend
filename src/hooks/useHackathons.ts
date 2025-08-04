@@ -1,7 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 import { Hackathon, ApiResponse, Platform, FilterState } from "@/types/hackathon";
 
-const API_BASE = "https://99b635cdad97.ngrok-free.app";
+const API_BASE = "https://c42fa33beed8.ngrok-free.app";
 const DEFAULT_HEADERS = {
   "ngrok-skip-browser-warning": "69420",
 };
@@ -12,6 +12,8 @@ async function fetchHackathons(endpoint = "/get-all-hackathons"): Promise<Hackat
     method: "GET",
     headers: DEFAULT_HEADERS,
   });
+
+  console.log("Fetching hackathons from:", `${API_BASE}/api${endpoint}`);
   
   if (!response.ok) {
     throw new Error("Failed to fetch hackathons");

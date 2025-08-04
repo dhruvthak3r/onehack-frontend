@@ -1,27 +1,99 @@
 import { useState, useEffect } from "react";
-import { Hackathon, ApiResponse} from "@/types/hackathon";
+import { Hackathon } from "@/types/hackathon";
+import { useAuth0 } from "@auth0/auth0-react";
+import { log } from "console";
 
-const API_BASE = "https://99b635cdad97.ngrok-free.app";
+interface BookmarkResponse {
+  message: string;
+}
+
+interface HackathonListResponse {
+  bookmarks: Hackathon[];
+}
+
+const API_BASE = "https://c42fa33beed8.ngrok-free.app";
 const DEFAULT_HEADERS = {
   "ngrok-skip-browser-warning": "69420",
 };
 
 export function useBookmarks() {
+  const { isAuthenticated, getAccessTokenSilently, getAccessTokenWithPopup,logout } = useAuth0();
   const [bookmarks, setBookmarks] = useState<Hackathon[]>([]);
   const [loading, setLoading] = useState(false);
 
   const STORAGE_KEY = "hackhub-bookmarks";
 
-  useEffect(() => {
+  // ✅ Correct getValidToken
+  const getValidToken = async (): Promise<string> => {
+    const authParams = {
+      authorizationParams: {
+        audience: "https://onehack.dev/api",
+        scope: "openid profile email offline_access",
+      },
+    };
+
     try {
-      const saved = localStorage.getItem(STORAGE_KEY);
-      if (saved) {
-        setBookmarks(JSON.parse(saved));
-      }
-    } catch (error) {
-      console.error("Error loading bookmarks:", error);
+      const token =  await getAccessTokenSilently(authParams);
+      console.log("🔐 Access Token:", token);
+      return token;
+    } catch (err) {
+      console.warn("Silent token failed, using popup login...", err);
+      return await getAccessTokenWithPopup(authParams);
     }
-  }, []);
+  };
+
+  const fetchWithAuth = async <T>(
+    endpoint: string,
+    method: string,
+    body?: any
+  ): Promise<T> => {
+    const token = await getValidToken();
+
+   
+    console.log("📥 [Before Request] Token being used:", token);
+
+    const response = await fetch(`${API_BASE}${endpoint}`, {
+      method,
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+        ...DEFAULT_HEADERS,
+      },
+    });
+
+    console.log("📥 [After Request] Token being used:", token);
+
+    if (!response.ok) {
+      throw new Error(`Failed to ${method} ${endpoint}`);
+    }
+
+    return response.json() as Promise<T>;
+  };
+
+  useEffect(() => {
+    //logout({ logoutParams: { returnTo: window.location.origin } });
+    const initBookmarks = async () => {
+      setLoading(true);
+      try {
+        if (isAuthenticated) {
+          const data = await fetchWithAuth<HackathonListResponse>(`/api/bookmark`, "GET");
+          setBookmarks(data.bookmarks);
+          localStorage.setItem(STORAGE_KEY, JSON.stringify(data.bookmarks));
+        } else {
+          const saved = localStorage.getItem(STORAGE_KEY);
+          if (saved) {
+            setBookmarks(JSON.parse(saved));
+          }
+        }
+      } catch (error) {
+        console.error("Error initializing bookmarks:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    initBookmarks();
+  }, [isAuthenticated]);
 
   const saveBookmarks = (newBookmarks: Hackathon[]) => {
     try {
@@ -38,35 +110,10 @@ export function useBookmarks() {
     );
   };
 
-  
-
   const addBookmark = async (hackathon: Hackathon) => {
     setLoading(true);
     try {
-      const response = await fetch(`${API_BASE}/api/bookmark/${hackathon.id}`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          ...DEFAULT_HEADERS,
-        },
-        body: JSON.stringify(hackathon),
-        credentials: "include",
-      });
-
-      if (response.redirected) {
-      // Do the actual browser redirect manually
-      window.location.href = response.url;
-      return;
-       }
-
-      if (!response.ok) {
-        throw new Error("Failed to add bookmark");
-      }
-
-      const data: ApiResponse = await response.json();
-      if (!data.success) {
-        throw new Error("API returned unsuccessful response");
-      }
+      await fetchWithAuth<BookmarkResponse>(`/api/bookmark/${hackathon.id}`, "POST");
 
       if (!isBookmarked(hackathon)) {
         const newBookmarks = [...bookmarks, hackathon];
@@ -74,7 +121,6 @@ export function useBookmarks() {
       }
     } catch (error) {
       console.error("Error adding bookmark:", error);
-      throw error;
     } finally {
       setLoading(false);
     }
@@ -83,23 +129,7 @@ export function useBookmarks() {
   const removeBookmark = async (hackathon: Hackathon) => {
     setLoading(true);
     try {
-      const response = await fetch(`${API_BASE}/api/bookmark`, {
-        method: "DELETE",
-        headers: {
-          "Content-Type": "application/json",
-          ...DEFAULT_HEADERS,
-        },
-        body: JSON.stringify(hackathon),
-      });
-
-      if (!response.ok) {
-        throw new Error("Failed to remove bookmark");
-      }
-
-      const data: ApiResponse = await response.json();
-      if (!data.success) {
-        throw new Error("API returned unsuccessful response");
-      }
+      await fetchWithAuth<BookmarkResponse>(`/api/bookmark/${hackathon.id}`, "DELETE", hackathon);
 
       const newBookmarks = bookmarks.filter(
         (b) => !(b.title === hackathon.title && b.start_date === hackathon.start_date)
@@ -107,7 +137,6 @@ export function useBookmarks() {
       saveBookmarks(newBookmarks);
     } catch (error) {
       console.error("Error removing bookmark:", error);
-      throw error;
     } finally {
       setLoading(false);
     }
