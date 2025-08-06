@@ -13,6 +13,10 @@ export interface ApiResponse {
   success: boolean;
 }
 
+export interface BookmarkResponse {
+  message: string;
+}
+
 
 export type Platform = "devfolio" | "devpost" | "unstop" | "dorahacks";
 

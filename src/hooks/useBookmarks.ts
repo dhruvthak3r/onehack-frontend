@@ -1,29 +1,22 @@
 import { useState, useEffect } from "react";
-import { Hackathon } from "@/types/hackathon";
+import { ApiResponse, BookmarkResponse, Hackathon } from "@/types/hackathon";
 import { useAuth0 } from "@auth0/auth0-react";
-import { log } from "console";
 
-interface BookmarkResponse {
-  message: string;
-}
 
-interface HackathonListResponse {
-  bookmarks: Hackathon[];
-}
 
-const API_BASE = "https://c42fa33beed8.ngrok-free.app";
+const API_BASE = "https://548acf9e0b32.ngrok-free.app";
 const DEFAULT_HEADERS = {
   "ngrok-skip-browser-warning": "69420",
 };
 
 export function useBookmarks() {
-  const { isAuthenticated, getAccessTokenSilently, getAccessTokenWithPopup,logout } = useAuth0();
+  const { isAuthenticated, getAccessTokenSilently, getAccessTokenWithPopup,logout,user} = useAuth0();
   const [bookmarks, setBookmarks] = useState<Hackathon[]>([]);
   const [loading, setLoading] = useState(false);
 
   const STORAGE_KEY = "hackhub-bookmarks";
 
-  // ✅ Correct getValidToken
+  
   const getValidToken = async (): Promise<string> => {
     const authParams = {
       authorizationParams: {
@@ -69,31 +62,52 @@ export function useBookmarks() {
 
     return response.json() as Promise<T>;
   };
+//logout({ logoutParams: { returnTo: window.location.origin } });
 
-  useEffect(() => {
-    //logout({ logoutParams: { returnTo: window.location.origin } });
-    const initBookmarks = async () => {
-      setLoading(true);
-      try {
-        if (isAuthenticated) {
-          const data = await fetchWithAuth<HackathonListResponse>(`/api/bookmark`, "GET");
-          setBookmarks(data.bookmarks);
-          localStorage.setItem(STORAGE_KEY, JSON.stringify(data.bookmarks));
-        } else {
-          const saved = localStorage.getItem(STORAGE_KEY);
-          if (saved) {
-            setBookmarks(JSON.parse(saved));
-          }
-        }
-      } catch (error) {
-        console.error("Error initializing bookmarks:", error);
-      } finally {
-        setLoading(false);
+// Define this outside useEffect
+const refreshBookmarks = async () => {
+  setLoading(true);
+  try {
+    if (isAuthenticated && user) {
+      const token = await getValidToken();
+      const userSub = user.sub;
+
+      const response = await fetch(`${API_BASE}/api/get-bookmarks/${userSub}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          ...DEFAULT_HEADERS,
+        },
+      });
+
+      if (!response.ok) throw new Error("Failed to fetch bookmarks");
+
+      const data: ApiResponse = await response.json();
+      setBookmarks(data.hackathons);
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(data.hackathons));
+    } else {
+      const saved = localStorage.getItem(STORAGE_KEY);
+      if (saved) {
+        setBookmarks(JSON.parse(saved));
       }
-    };
+    }
+  } catch (error) {
+    console.error("Error initializing bookmarks:", error);
+  } finally {
+    setLoading(false);
+  }
+};
 
-    initBookmarks();
-  }, [isAuthenticated]);
+useEffect(() => {
+  const shouldFetch = isAuthenticated && user && user.sub;
+  if (!shouldFetch) return;
+
+  refreshBookmarks();
+
+  const interval = setInterval(refreshBookmarks, 5 * 60 * 1000);
+  return () => clearInterval(interval);
+}, [isAuthenticated, user]);
+
+
 
   const saveBookmarks = (newBookmarks: Hackathon[]) => {
     try {
@@ -106,7 +120,7 @@ export function useBookmarks() {
 
   const isBookmarked = (hackathon: Hackathon) => {
     return bookmarks.some(
-      (b) => b.title === hackathon.title && b.start_date === hackathon.start_date
+      (b) => b.id === hackathon.id
     );
   };
 
@@ -157,5 +171,6 @@ export function useBookmarks() {
     addBookmark,
     removeBookmark,
     toggleBookmark,
+    refreshBookmarks
   };
 }

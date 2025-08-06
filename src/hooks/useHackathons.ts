@@ -1,7 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 import { Hackathon, ApiResponse, Platform, FilterState } from "@/types/hackathon";
 
-const API_BASE = "https://c42fa33beed8.ngrok-free.app";
+const API_BASE = "https://548acf9e0b32.ngrok-free.app";
 const DEFAULT_HEADERS = {
   "ngrok-skip-browser-warning": "69420",
 };

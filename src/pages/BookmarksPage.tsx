@@ -4,9 +4,17 @@ import { EmptyState } from "@/components/EmptyState";
 import { useBookmarks } from "@/hooks/useBookmarks";
 import { Bookmark, Heart, TrendingUp } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
+import { useEffect } from "react";
+
+
+
 
 const BookmarksPage = () => {
-  const { bookmarks, toggleBookmark } = useBookmarks();
+  const { bookmarks, toggleBookmark , refreshBookmarks} = useBookmarks();
+
+  useEffect(() => {
+  refreshBookmarks();
+ }, []);
 
   const upcomingBookmarks = bookmarks.filter(h => new Date(h.start_date) > new Date());
   const pastBookmarks = bookmarks.filter(h => new Date(h.end_date) < new Date());
