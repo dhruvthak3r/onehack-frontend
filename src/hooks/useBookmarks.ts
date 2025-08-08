@@ -4,10 +4,8 @@ import { useAuth0 } from "@auth0/auth0-react";
 
 
 
-const API_BASE = "https://548acf9e0b32.ngrok-free.app";
-const DEFAULT_HEADERS = {
-  "ngrok-skip-browser-warning": "69420",
-};
+const API_BASE = "http://43.205.44.57:8080";
+
 
 export function useBookmarks() {
   const { isAuthenticated, getAccessTokenSilently, getAccessTokenWithPopup,logout,user} = useAuth0();
@@ -50,7 +48,6 @@ export function useBookmarks() {
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ${token}`,
-        ...DEFAULT_HEADERS,
       },
     });
 
@@ -62,9 +59,10 @@ export function useBookmarks() {
 
     return response.json() as Promise<T>;
   };
+
 //logout({ logoutParams: { returnTo: window.location.origin } });
 
-// Define this outside useEffect
+
 const refreshBookmarks = async () => {
   setLoading(true);
   try {
@@ -75,7 +73,6 @@ const refreshBookmarks = async () => {
       const response = await fetch(`${API_BASE}/api/get-bookmarks/${userSub}`, {
         headers: {
           Authorization: `Bearer ${token}`,
-          ...DEFAULT_HEADERS,
         },
       });
 

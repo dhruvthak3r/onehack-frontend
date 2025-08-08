@@ -10,7 +10,7 @@ import { Loader2, Sparkles } from "lucide-react";
 
 const Index = () => {
   const { hackathons, loading, error, searchHackathons, filterHackathons } = useHackathons();
-  const { isBookmarked, toggleBookmark } = useBookmarks(); // ❌ Commented for testing
+  const { isBookmarked, toggleBookmark } = useBookmarks();
   
   const [filters, setFilters] = useState<FilterState>({
     platforms: [],
