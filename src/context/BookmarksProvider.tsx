@@ -2,7 +2,7 @@ import { createContext, useContext, useEffect, useState } from "react";
 import { useAuth0 } from "@auth0/auth0-react";
 import { Hackathon, ApiResponse } from "@/types/hackathon";
 
-const API_BASE = "https://onehack.live";
+const API_BASE = "https://api.onehack.live";
 const STORAGE_KEY = "bookmarkedHackathons";
 
 interface BookmarksContextType {

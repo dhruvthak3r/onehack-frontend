@@ -2,7 +2,9 @@ import { useAuth0 } from "@auth0/auth0-react";
 import { Hackathon, BookmarkResponse } from "@/types/hackathon";
 import { useBookmarksContext } from "@/context/BookmarksProvider";
 
-const API_BASE = "https://onehack.live";
+const API_BASE = "https://api.onehack.live";
+
+
 
 export function useBookmarks() {
   const { isAuthenticated, getAccessTokenSilently, getAccessTokenWithPopup } = useAuth0();

@@ -1,8 +1,8 @@
 import { useQuery } from "@tanstack/react-query";
 import { Hackathon, ApiResponse, Platform, FilterState } from "@/types/hackathon";
 
+const API_BASE = "https://api.onehack.live";
 
-const API_BASE = "https://onehack.live";
 
 
 
