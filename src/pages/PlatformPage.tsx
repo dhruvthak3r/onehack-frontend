@@ -40,7 +40,7 @@ const platformData = {
 const PlatformPage = () => {
   const { platform } = useParams<{ platform: string }>();
   const { hackathons, loading, error, fetchByPlatform } = useHackathons();
-  //const { isBookmarked, toggleBookmark } = useBookmarks();
+  const { isBookmarked, toggleBookmark } = useBookmarks();
 
   const currentPlatform = platform as Platform;
   const platformInfo = platformData[currentPlatform];
@@ -157,8 +157,8 @@ const PlatformPage = () => {
                 >
                   <HackathonCard
                     hackathon={hackathon}
-                    //isBookmarked={isBookmarked(hackathon)}
-                    //onBookmarkToggle={toggleBookmark}
+                    isBookmarked={isBookmarked(hackathon)}
+                    onBookmarkToggle={toggleBookmark}
                   />
                 </div>
               ))}

@@ -2,6 +2,7 @@ import { Link, useLocation } from "react-router-dom";
 import { Bookmark, Calendar, Code, Github } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import ProfileDropdown from "@/components/Profile";
 
 export function Header() {
   const location = useLocation();
@@ -85,18 +86,18 @@ export function Header() {
             </Button>
           </div>
 
-          {/* GitHub Link */}
-          <div className="hidden lg:flex items-center gap-2">
-            <Badge variant="secondary" className="bg-surface hover:bg-surface-hover transition-colors">
-              <span className="animate-pulse w-2 h-2 bg-success rounded-full mr-2"></span>
-              Live
-            </Badge>
-            <Button variant="ghost" size="sm" asChild>
-              <a href="https://github.com" target="_blank" rel="noopener noreferrer">
-                <Github className="h-4 w-4" />
-              </a>
-            </Button>
-          </div>
+
+         <div className="hidden lg:flex items-center gap-4">
+      
+       <Badge variant="secondary" className="bg-surface hover:bg-surface-hover transition-colors">
+       <span className="animate-pulse w-2 h-2 bg-success rounded-full mr-2"></span>
+       Live
+      </Badge>
+
+      {/* Profile Dropdown */}
+      <ProfileDropdown/>
+      </div>
+
         </div>
       </div>
     </header>

@@ -2,7 +2,7 @@ import { useQuery } from "@tanstack/react-query";
 import { Hackathon, ApiResponse, Platform, FilterState } from "@/types/hackathon";
 
 
-const API_BASE = "http://43.205.44.57:8080";
+const API_BASE = "https://onehack.live";
 
 
 

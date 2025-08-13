@@ -6,11 +6,13 @@ import { Bookmark, Heart, TrendingUp } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { useEffect } from "react";
 
+import { useBookmarksContext } from "@/context/BookmarksProvider";
 
 
 
 const BookmarksPage = () => {
-  const { bookmarks, toggleBookmark , refreshBookmarks} = useBookmarks();
+   const { bookmarks, refreshBookmarks, loading } = useBookmarksContext();
+  const { toggleBookmark } = useBookmarks();
 
   useEffect(() => {
   refreshBookmarks();

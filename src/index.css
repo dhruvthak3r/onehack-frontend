@@ -7,40 +7,40 @@
 @layer base {
   :root {
     /* Dark Base Colors */
-    --background: 224 71% 4%;
-    --foreground: 213 31% 91%;
+    --background: 0 0% 5%;
+    --foreground: 0 0% 100%;
 
     /* Card & Surface Colors */
-    --card: 224 71% 4%;
-    --card-foreground: 213 31% 91%;
-    --surface: 220 13% 9%;
-    --surface-hover: 220 13% 12%;
+    --card: 0 0% 7%;
+    --card-foreground: 0 0% 100%;
+    --surface: 0 0% 10%;
+    --surface-hover: 0 0% 15%;
 
-    /* Primary Brand Colors - Purple/Blue gradient theme */
-    --primary: 263 70% 50%;
-    --primary-foreground: 210 20% 98%;
-    --primary-glow: 271 91% 65%;
+    /* Primary Brand Colors */
+    --primary: 120 100% 30%;
+    --primary-foreground: 0 0% 100%;
+    --primary-glow: 120 100% 45%;
 
     /* Secondary & Accent */
-    --secondary: 220 13% 9%;
-    --secondary-foreground: 213 31% 91%;
-    --accent: 271 91% 65%;
-    --accent-foreground: 224 71% 4%;
+    --secondary: 120 60% 20%;
+    --secondary-foreground: 0 0% 100%;
+    --accent: 120 100% 25%;
+    --accent-foreground: 0 0% 100%;
 
     /* Muted Colors */
-    --muted: 220 13% 9%;
-    --muted-foreground: 220 9% 46%;
+    --muted: 0 0% 20%;
+    --muted-foreground: 0 0% 60%;
 
     /* Interactive States */
     --destructive: 0 84% 60%;
-    --destructive-foreground: 210 20% 98%;
-    --success: 142 71% 45%;
-    --warning: 38 92% 50%;
+    --destructive-foreground: 0 0% 100%;
+    --success: 120 100% 25%;
+    --warning: 45 100% 50%;
 
     /* Borders & Inputs */
-    --border: 220 13% 18%;
-    --input: 220 13% 18%;
-    --ring: 271 91% 65%;
+    --border: 0 0% 25%;
+    --input: 0 0% 25%;
+    --ring: 120 100% 40%;
 
     /* Layout */
     --radius: 0.75rem;
@@ -54,29 +54,24 @@
     --shadow-sm: 0 1px 2px 0 hsl(var(--primary) / 0.05);
     --shadow-md: 0 4px 6px -1px hsl(var(--primary) / 0.1);
     --shadow-lg: 0 10px 15px -3px hsl(var(--primary) / 0.1);
-    --shadow-glow: 0 0 20px hsl(var(--accent) / 0.15);
+    --shadow-glow: 0 0 20px hsl(var(--accent) / 0.25);
 
     /* Animations */
     --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     --transition-spring: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 
-    --sidebar-background: 0 0% 98%;
-
-    --sidebar-foreground: 240 5.3% 26.1%;
-
-    --sidebar-primary: 240 5.9% 10%;
-
-    --sidebar-primary-foreground: 0 0% 98%;
-
-    --sidebar-accent: 240 4.8% 95.9%;
-
-    --sidebar-accent-foreground: 240 5.9% 10%;
-
-    --sidebar-border: 220 13% 91%;
-
-    --sidebar-ring: 217.2 91.2% 59.8%;
+    /* Sidebar Colors */
+    --sidebar-background: 0 0% 4%;
+    --sidebar-foreground: 0 0% 100%;
+    --sidebar-primary: 120 100% 45%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 120 100% 20%;
+    --sidebar-accent-foreground: 0 0% 100%;
+    --sidebar-border: 0 0% 25%;
+    --sidebar-ring: 120 100% 40%;
   }
 }
+
 
 @layer base {
   * {
